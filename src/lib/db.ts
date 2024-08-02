@@ -1,12 +1,36 @@
 import pg from "pg";
 const { Pool } = pg;
 
-const pool = new Pool({
-  host: "localhost",
+const { NODE_ENV, DB_URI, DB_USER, DB_PASSWORD } = process.env;
+
+type PoolConfig = {
+  host: string;
+  port: number;
+  database: string;
+  user: string;
+  password?: string;
+  ssl: {
+    require: boolean;
+    rejectUnauthorized: boolean;
+  };
+};
+
+const poolConfig: PoolConfig = {
+  host: DB_URI,
   port: 5432,
-  database: "letalk",
-  user: "admin",
-});
+  database: "postgres",
+  user: DB_USER,
+  ssl: {
+    rejectUnauthorized: false,
+    require: true,
+  },
+};
+
+if (NODE_ENV !== "development") {
+  poolConfig.password = DB_PASSWORD;
+}
+
+const pool = new Pool(poolConfig);
 
 export const query = (text: string, params?: any) => pool.query(text, params);
 
