@@ -9,7 +9,7 @@ type PoolConfig = {
   database: string;
   user: string;
   password?: string;
-  ssl: {
+  ssl?: {
     require: boolean;
     rejectUnauthorized: boolean;
   };
@@ -20,14 +20,14 @@ const poolConfig: PoolConfig = {
   port: 5432,
   database: "postgres",
   user: DB_USER,
-  ssl: {
-    rejectUnauthorized: false,
-    require: true,
-  },
 };
 
 if (NODE_ENV !== "development") {
   poolConfig.password = DB_PASSWORD;
+  poolConfig.ssl = {
+    rejectUnauthorized: false,
+    require: true,
+  };
 }
 
 const pool = new Pool(poolConfig);
