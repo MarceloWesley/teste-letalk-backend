@@ -7,7 +7,7 @@ export class LoansController {
   public async findAll(req: Request, res: Response): Promise<Response> {
     try {
       const response = await findAll();
-      return res.status(200).json({ data: response.rows });
+      return res.status(200).json({ data: response });
     } catch (error: any) {
       console.error(error);
 
@@ -22,7 +22,7 @@ export class LoansController {
   public async createOne(req: Request, res: Response): Promise<Response> {
     try {
       const response = await createOne(req.body);
-      return res.status(200).json({ data: response.rows });
+      return res.status(200).json({ data: response });
     } catch (error: any) {
       console.error(error);
 

@@ -1,48 +1,34 @@
-import pg from "pg";
-const { Pool } = pg;
+import postgres, { type Options } from "postgres";
 
-const { NODE_ENV, DB_URI, DB_USER, DB_PASSWORD } = process.env;
+const { NODE_ENV, PG_HOST, PG_DATABASE, PG_USER, PG_PASSWORD, ENDPOINT_ID } =
+  process.env;
 
-type PoolConfig = {
-  host: string;
-  port: number;
-  database: string;
-  user: string;
-  password?: string;
-  ssl?: {
-    require: boolean;
-    rejectUnauthorized: boolean;
-  };
-};
-
-const poolConfig: PoolConfig = {
-  host: DB_URI,
+const postgresConfig: Options<any> = {
+  host: PG_HOST,
+  database: PG_DATABASE,
+  username: PG_USER,
   port: 5432,
-  database: "postgres",
-  user: DB_USER,
 };
 
 if (NODE_ENV !== "development") {
-  poolConfig.password = DB_PASSWORD;
-  poolConfig.ssl = {
-    rejectUnauthorized: false,
-    require: true,
+  postgresConfig.password = PG_PASSWORD;
+  postgresConfig.ssl = "require";
+  postgresConfig.connection = {
+    options: `project=${ENDPOINT_ID}`,
   };
 }
 
-const pool = new Pool(poolConfig);
+console.log({ postgresConfig });
 
-export const query = (text: string, params?: any) => pool.query(text, params);
+export const sql = postgres(postgresConfig);
 
 export const createDatabases = async () => {
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS loans (
+  await sql`CREATE TABLE IF NOT EXISTS loans (
       id SERIAL NOT NULL PRIMARY KEY,
       cpf VARCHAR(255),
       uf VARCHAR(255),
       birthdate DATE,
       loan_amount DECIMAL(10, 2),
       desired_payment DECIMAL(10, 2)
-    );
-  `);
+    )`;
 };
