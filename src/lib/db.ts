@@ -18,8 +18,6 @@ if (NODE_ENV !== "development") {
   };
 }
 
-console.log({ postgresConfig });
-
 export const sql = postgres(postgresConfig);
 
 export const createDatabases = async () => {
