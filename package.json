@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./dist/server.js",
     "dev": "tsx watch ./src/server.ts",
-    "buildMin": "tsup ./src/server.ts --format esm,cjs --minify",
+    "buildMin": "npx tsup ./src/server.ts --format esm,cjs --minify",
     "build": "npx tsup ./src/server.ts --format esm,cjs",
     "prebuild": "rm -rf ./dist"
   },
