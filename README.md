@@ -1,5 +1,5 @@
-# Descrição
- teste prático backend para a vaga fullstack da letalk
+# Description
+backend practical test for the full stack vacancy at letalk
 
  ## Techs
 - NodeJs
